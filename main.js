@@ -1,19 +1,27 @@
 const form = document.getElementById("formularioClima");
-const toggleTempDiv = document.querySelector(".toggle-temp");
 const labelTemp = document.getElementById("label-temp");
+
+const toggleTempDiv = document.querySelector(".toggle-temp");
+
 let unidade = "C"; 
 let dados = null;
+
+
+
+
 
 
 //  LOCALSTORAGE (CONFIGURAÇÕES)
 function carregarConfig() {
     const config = JSON.parse(localStorage.getItem("configClima")) || {};
 
+
     if (config.unidade) {
         unidade = config.unidade;
         toggleTempDiv.classList.toggle("active", unidade === "F");
         labelTemp.textContent = unidade === "F" ? "°F" : "°C";
     }
+
 
     if (config.ultimaCidade) {
         document.getElementById("cidade").value = config.ultimaCidade;
@@ -27,8 +35,8 @@ function salvarConfig(chave, valor) {
     localStorage.setItem("configClima", JSON.stringify(config));
 }
 
-
 carregarConfig();
+
 // Loader
 function mostrarLoader() {
     document.getElementById("loader").style.display = "block";
@@ -36,9 +44,11 @@ function mostrarLoader() {
 function esconderLoader() {
     document.getElementById("loader").style.display = "none";
 }
+
 // Conversão
 function cToF(c) { return c * 9/5 + 32; }
 function fToC(f) { return (f - 32) * 5/9; }
+
 
 // Toggle °C / °F
 toggleTempDiv.addEventListener("click", () => {
@@ -46,20 +56,20 @@ toggleTempDiv.addEventListener("click", () => {
     unidade = toggleTempDiv.classList.contains("active") ? "F" : "C";
 
     salvarConfig("unidade", unidade);
+
     labelTemp.textContent = unidade === "F" ? "°F" : "°C";
     atualizarTemperatura();
 });
 
 
 // Atualiza temperaturas
-
-
 function atualizarTemperatura() {
     if (!dados) return;
+
+
     let tempAtual = dados.current.temperature_2m;
     if (unidade === "F") tempAtual = cToF(tempAtual);
     document.getElementById("temp-atual").textContent = `${Math.round(tempAtual)}°`;
-
 
     let tempMax = dados.daily.temperature_2m_max[0];
     let tempMin = dados.daily.temperature_2m_min[0];
@@ -83,103 +93,72 @@ function atualizarTemperatura() {
 //     45:"nuvem.svg", 51:"chuva.svg", 61:"chuva.svg", 80:"chuva.svg",
 //     95:"trovoada.svg", 71:"neve.svg"
 // };
-const weatherIcons = {
-    0:"☀️", 1:"🌥️", 2:"🌥️", 3:"🌥️",
-    45:"nuvem.svg", 51:"🌧️", 61:"🌧️", 80:"🌧️",
-    95:"⛈️", 71:"🌨️"
-};
-
-
-// SALVAR HISTÓRICO NO SERVIDOR
-function salvarHistorico() {
-    if (!dados) return;
-    const registro = {
-        cidade: document.getElementById("cidade-atual").textContent,
-        temperatura: document.getElementById("temp-atual").textContent,
-        descricao: document.getElementById("descricao-atual").textContent,
-        unidade: unidade,
-        data: new Date().toISOString()
-    };
-    fetch("clima.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(registro)
-    })
-    .then(res => res.json())
-    .then(r => {
-        console.log("Histórico salvo:", r.message);
-        carregarHistoricoServidor();
-    })
-    .catch(err => console.error("Erro ao salvar histórico:", err));
-}
-
-
-// CARREGAR HISTÓRICO DO SERVIDOR
-function carregarHistoricoServidor() {
-    const container = document.getElementById("historico-lista");
-    if (!container) return;
-
-
-    fetch("clima.php?listarHistorico=1")
-        .then(res => res.json())
-        .then(lista => {
-            container.innerHTML = "";
-
-
-            lista.slice().reverse().forEach(item => {
-                container.innerHTML += `
-                    <div class="item-historico">
-                        <strong>${item.cidade}</strong> — 
-                        ${item.temperatura} — ${item.descricao}
-                        <br>
-                        <small>${new Date(item.data).toLocaleString()}</small>
-                    </div>
-                `;
-            });
-        })
-        .catch(err => console.error("Erro ao carregar histórico:", err));
-}
 
 
 // BOTÃO: MOSTRAR / OCULTAR HISTÓRICO
 const btnHistorico = document.getElementById("btn-historico");
 const historicoContainer = document.getElementById("historico-container");
 
+
 if (btnHistorico) {
     btnHistorico.addEventListener("click", () => {
         const isVisible = historicoContainer.style.display === "block";
         historicoContainer.style.display = isVisible ? "none" : "block";
 
+
         btnHistorico.textContent = isVisible ? "Mostrar Histórico" : "Ocultar Histórico";
+
 
         if (!isVisible) {
             carregarHistoricoServidor();
         }
     });
 }
-// Carrega histórico ao entrar no site
-carregarHistoricoServidor();
+
+// const weatherIcons = {
+//     0:"☀️", 
+//     1:"🌥️", 
+//     2:"🌥️", 
+//     3:"🌥️",
+//     45:"nuvem.svg", 
+//     51:"🌧️", 
+//     61:"🌧️", 
+//     80:"🌧️",
+//     95:"⛈️", 
+//     71:"🌨️"
+// };
+
+const weatherIcons = {
+    0:"assets/img/Icones_branco/sol.svg", 
+    1:"assets/img/Icones_branco/nuvem.svg", 
+    2:"assets/img/Icones_branco/nuvem.svg", 
+    3:"assets/img/Icones_branco/nuvem.svg",
+    45:"assets/img/Icones_branco/nuvem.svg", 
+    51:"assets/img/Icones_branco/chuva.svg", 
+    61:"assets/img/Icones_branco/chuva.svg", 
+    80:"assets/img/Icones_branco/chuva.svg",
+    95:"assets/img/Icones_branco/trovoada.svg", 
+    71:"assets/img/Icones_branco/neve.svg"
+};
+
 // FETCH PRINCIPAL DE CLIMA
+
 form.addEventListener("submit", (event) => {
+
     event.preventDefault();
 
-    // trim() - remove espaços vazios 
     const cidade = document.getElementById("cidade").value.trim();
     if (cidade === "") return alert("Preencha o campo!");
-
 
     salvarConfig("ultimaCidade", cidade);
     mostrarLoader();
 
-
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json&countryCode=BR`;
-
-
     fetch(url)
         .then(res => res.json())
         .then(local => {
 
-
+            console.log(local)
             if (!local.results) {
                 esconderLoader();
                 return alert("Cidade não Encontrada!");
@@ -187,7 +166,10 @@ form.addEventListener("submit", (event) => {
 
 
             const resultado = local.results[0];
-            const dadosCidade = { cidade: resultado.name, latitude: resultado.latitude, longitude: resultado.longitude };
+            const dadosCidade = { 
+                cidade: resultado.name, 
+                latitude: resultado.latitude, 
+                longitude: resultado.longitude };
 
 
             const urlCidade = `https://api.open-meteo.com/v1/forecast?latitude=${dadosCidade.latitude}&longitude=${dadosCidade.longitude}&daily=sunrise,sunset,daylight_duration,uv_index_max,temperature_2m_max,temperature_2m_min,weathercode&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain&current=apparent_temperature,is_day,precipitation,rain,wind_speed_10m,temperature_2m,relative_humidity_2m,weathercode&timezone=America%2FSao_Paulo`;
@@ -197,7 +179,7 @@ form.addEventListener("submit", (event) => {
                 .then(res => res.json())
                 .then(apiDados => {
 
-
+                    console.log(apiDados);
                     dados = apiDados;
 
 
@@ -233,8 +215,7 @@ form.addEventListener("submit", (event) => {
 
 
                     const codigoAtual = dados.current.weathercode ?? 0;
-                    document.getElementById("img-iconeAtual").textContent =
-                        `${weatherIcons[codigoAtual] || "☀️"}`;
+                    document.getElementById("img-iconeAtual").setAttribute("src", `${weatherIcons[codigoAtual] || "assets/img/Icones_branco/sol.svg"}`);
 
 
                     const boxes = document.querySelectorAll(".box-dias");
@@ -256,24 +237,19 @@ form.addEventListener("submit", (event) => {
 
 
                         const codigo = dados.daily.weathercode[i];
-                        const icone = weatherIcons[codigo] || "☀️";
+                        const icone = weatherIcons[codigo] || "assets/img/Icones_branco/sol.svg";
 
 
                         box.querySelector(".dia").textContent = nomeDia;
-                        box.querySelector(".graus").textContent =
-                            `${Math.round(tempMax)}° / ${Math.round(tempMin)}°`;
-                        box.querySelector(".img").textContent = `${icone}`;
+                        box.querySelector(".graus").textContent = `${Math.round(tempMax)}° / ${Math.round(tempMin)}°`;
+                        box.querySelector(".img").setAttribute("src", `${icone}`);
                     }
 
 
                     atualizarTemperatura();
                     esconderLoader();
-
-
-                
                     // SALVAR HISTÓRICO
-                
-                    salvarHistorico();
+                    // salvarHistorico();
                 });
         })
         .catch(err => {
