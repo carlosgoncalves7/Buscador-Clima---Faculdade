@@ -16,41 +16,43 @@
 </head>
 
 <body>
-    <div class="toggle-container">
-        <div translate="no" class="toggle">
-            <div class="emoji moon">🌑</div>
-            <div class="emoji sun">☀️</div>
-        </div>
-    </div>
-    <div class="toggle-container-temp">
-        <div class="toggle-temp"></div>
-        <span id="label-temp">°C</span>
-    </div>
+
 
     <div id="loader" class="loader" style="display:none;"></div>
 
     <div class="circulo"></div>
 
     <header class="header form-box flex-item">
-        <form id="formularioClima" class="form">
-            <h2>Buscar Cidade</h2>
-            <input id="cidade" type="text" placeholder="Pesquisar...">
-            <button class="btn-pesquisa" type="submit">Pesquisar</button>
-        </form>
+        <div class="nav">
+            <form id="formularioClima" class="form">
+                <h2>Buscar Clima</h2>
+                <span>Cidade</span>
+                <input id="cidade" type="text" placeholder="Pesquisar...">
+                <button id="btn-pesquisa" class="btn-pesquisa" type="submit"><span>Pesquisar</span> <img class="search" src="assets/img/search.svg" alt=""></button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div translate="no" class="toggle">
+                <div class="emoji moon">🌑</div>
+                <div class="emoji sun">☀️</div>
+            </div>
+        </div>
+        <div class="toggle-container-temp">
+            <div class="toggle-temp"></div>
+            <span id="label-temp">°C</span>
+        </div>
     </header>
 
     <main class="main-container">
-        <div class="top-content top-scale">
-            <div class="hero-content altura-container flex-div">
+            <div class="hero-container">
                 <div class="cidade-content">
-                    <span id="data-atual" class="data cor-70"></span>
-                    <span id="cidade-atual" class="cidade cor-100"></span>
-
-                    <span id="img-iconeAtual" alt="" class="vector-clima"></span>
+                    <p id="data-atual" class="data cor-70"></p>
+                    <p id="cidade-atual" class="cidade cor-100"></p>
+                    <img id="img-iconeAtual" alt="" class="vector-clima"></img>
                     <span id="descricao-atual" class="descricao-clima cor-70"></span>
                 </div>
 
-                <div class="previsoes-atual">
+                <div class="cidade-descricao">
                     <span id="temp-atual" class="temperatura"></span>
                     <ul>
                         <li id="chuva-atual" class="chuva cor-70"></li>
@@ -60,58 +62,57 @@
                 </div>
             </div>
 
-            <div class="previcao-content altura-container flex-div">
+            <div class="semanal-container">
                 <span class="texto-semanal cor-70">Previsão Semanal</span>
 
-                <div class="grid-semanal">
+                <div id="semanal-boxs" class="semanal-box">
 
                     <div class="box-dias">
                         <span class="dia"></span>
-                        <span class="img"></span>
+                        <img class="img"></img>
                         <span class="graus"></span>
                     </div>
 
                     <div class="box-dias">
                         <span class="dia"></span>
-                        <span class="img"></span>
+                        <img class="img"></img>
                         <span class="graus"></span>
                     </div>
 
                     <div class="box-dias">
                         <span class="dia"></span>
-                        <span class="img"></span>
+                        <img class="img"></img>
                         <span class="graus"></span>
                     </div>
 
                     <div class="box-dias">
                         <span class="dia"></span>
-                        <span class="img"></span>
+                        <img class="img"></img>
                         <span class="graus"></span>
                     </div>
 
                     <div class="box-dias">
                         <span class="dia"></span>
-                        <span class="img"></span>
+                        <img class="img"></img>
                         <span class="graus"></span>
                     </div>
 
                     <div class="box-dias">
                         <span class="dia"></span>
-                        <span class="img"></span>
+                        <img class="img"></img>
                         <span class="graus"></span>
                     </div>
 
                     <div class="box-dias">
                         <span class="dia"></span>
-                        <span class="img"></span>
+                        <img class="img"></img>
                         <span class="graus"></span>
                     </div>
 
                 </div>
             </div>
-        </div>
 
-        <div class="low-content low-scale">
+        <div style="display: none;" class="low-content low-scale">
             <div class="box-low">
                 <span class="titulo">Alta|Baixa</span>
                 <p id="max-min" class="valor"></p>
