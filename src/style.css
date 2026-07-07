@@ -1,26 +1,74 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-
+/* O css possui varios import isso adiciona render blocking e dificulta depuração */
 @import url(components/header.css);
-@import url(components/hero-content.css);
-@import url(components/previsao.css);
+@import url(components/hero.css);
+
 @import url(components/low-content.css);
 @import url(global.css);
 @import url(components/tema.css);
 @import url(components/historico.css);
-
+@import url(components/layout.css);
+@import url(components/buttons.css);
 
 
 :root {
-    --branco-100: rgba(255, 255, 255, 1);
-    --branco-90: rgba(255, 255, 255, 0.9);
-    --branco-70: rgba(255, 255, 255, 0.7);
-    --cor-bg-dias: rgba(72, 49, 157, 0.2);
-    --cor-bg-hover-dias: rgba(72, 49, 157, 0.4);
-    --cor-bg: linear-gradient(135deg, #2E335A 0%, #1C1B33 100%);
+
+    --text-70: rgba(255, 255, 255, 0.7);
+    --text-90: rgba(255, 255, 255, 0.9);
+    --text-100: rgba(255, 255, 255, 1);
+
+    --color-black-70: rgba(0, 0, 0, 0.7);
+    --color-black-90: rgba(0, 0, 0, 0.9);
+    --color-black-100: rgba(0, 0, 0, 1);
+
+    --color-white: rgba(255, 255, 255, 1);
+
+    --color-primary-roxo: rgba(72, 49, 157, 1);
+
+    --color-box-bg: rgba(72, 49, 157, 0.2);
+    --color-box-bg-hover: rgba(72, 49, 157, 1);
+
+    --color-box-hover: rgba(72, 49, 157, 0.4);
+
+    --color-border-20: rgba(255, 255, 255, 0.2);
+    --color-border-50: rgba(255, 255, 255, 0.5);
+    --color-border-70: rgba(255, 255, 255, 0.5);
+
+    --color-bg-white-60: rgba(255, 255, 255, 0.6);
+
+    --color-bg-gradient: linear-gradient(135deg, #2E335A 0%, #1C1B33 100%);
     --cor-temp: rgba(255, 255, 255, 1);
     --cor-logo: #FFFFFF;
     --roxo-color: #48319D;
+
+
+
+    --shadow-btn: inset 2px 2px 1px #FFF,
+        inset -2px -2px 1px #bbbfc7,
+        3px 2px 10px 0 rgba(0, 0, 0, 0.2);
+
+    --shadow-box: inset 1px 1px 0px rgba(255, 255, 255, 0.25),
+        4px 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+html .light {
+    --text-100: rgba(255, 255, 255, 1);
+    --text-90: rgba(255, 255, 255, 0.9);
+    --text-70: rgba(255, 255, 255, 0.7);
+
+    --color-box-bg: linear-gradient(135deg, rgba(255, 158, 74, 1), rgba(255, 138, 51, 1), rgba(255, 106, 0, 1));
+    --color-box-bg-hover: linear-gradient(135deg, rgba(255, 158, 74, 0.4), rgba(255, 138, 51, 0.4), rgba(255, 106, 0, 0.4));
+
+
+    --color-box-bg: rgba(72, 49, 157, 0.2);
+    --color-box-hover: rgba(72, 49, 157, 0.4);
+    --color-bg-gradient: linear-gradient(135deg, #2E335A 0%, #1C1B33 100%);
+    --cor-temp: rgba(255, 255, 255, 1);
+    --cor-logo: #FFFFFF;
+    --roxo-color: #48319D;
+
+    --color-gradient-laranja: linear-gradient(90deg, #ff8a33 0%, #ff6a00 50%, #ff4f00 100%);
 }
 
 .flex-item {
@@ -35,34 +83,25 @@ body {
     min-width: 100%;
     font-style: normal;
     background: linear-gradient(135deg, #2E335A 0%, #1C1B33 100%);
+    background-repeat: no-repeat;
 }
 
 .main-container {
-    height: 85vh;
-    width: 80%;
-    max-width: 1280px;
-    margin: 0 auto;
-}
-
-.top-content {
-    position: relative;
-    background: linear-gradient(180deg, rgba(46, 51, 91, 0.2), rgba(28, 27, 51, 0.2));
-    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.2);
-    border-top-left-radius: 40px;
-    border-top-right-radius: 40px;
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(5px);
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
+    column-gap: 40px;
 
-.top-scale {
-    max-width: clamp(300px, 90vw, 1380px);
-    height: 70%;
+    width: 1047px;
+    max-width: 1280px;
+    /* height: 538px; */
     margin: 0 auto;
-    padding: clamp(1rem, 2rem, 4rem) clamp(2rem, 3rem, 5rem);
-    
+    padding: 32px 32px;
+
+    border-radius: 46px 46px 30px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.00);
+
+    background: linear-gradient(156deg, rgba(46, 51, 90, 0.20) 5.86%, rgba(28, 27, 51, 0.20) 84.56%);
+    box-shadow: 0.928px 0.928px 0 0 rgba(255, 255, 255, 0.25) inset, 0 1.055px 0 0 #FFF inset;
+    backdrop-filter: blur(26px);
 }
 
 .low-scale {
@@ -98,107 +137,6 @@ body {
     filter: blur(100px);
 }
 
-.toggle-container {
-    position: fixed;
-    right: 20px;
-    top: 10px;
-    width: 80px;
-    height: 40px;
-    cursor: pointer;
-    border-radius: 20px;
-    background: linear-gradient(90deg, #1d2332, #222);
-    box-shadow: inner 0 0 20px rgba(0, 0, 0, 0.1);
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
-}
-
-.toggle-container.light {
-    background: linear-gradient(90deg, #b5dbf8, #8cccfc);
-    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-
-.emoji {
-    font-size: 25px;
-    opacity: 0;
-}
-
-.toggle {
-    width: 36px;
-    height: 36px;
-    background: linear-gradient(45deg, #ffd700, #ffaa00);
-    border-radius: 50%;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease-in,
-        background 0.8s ease,
-        box-shadow 0.8s ease;
-    user-select: none;
-}
-
-.toggle .moon {
-    opacity: 1;
-}
-
-.toggle .sun {
-    opacity: 0;
-}
-
-.toggle.light {
-    position: absolute;
-    background: linear-gradient(145deg, #ffffff, #f0f0f0);
-    left: 42px;
-}
-
-.toggle.light .sun {
-    opacity: 1;
-}
-
-.toggle.light .moon {
-    opacity: 0;
-}
-
-.emoji {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.4s ease,
-        transform 0.4s ease;
-}
-
-.toggle-container-temp {
-    position: fixed;
-    right: 120px; /* ajusta posição horizontal */
-    top: 10px;    /* ajusta posição vertical */
-    width: 80px;
-    height: 40px;
-    cursor: pointer;
-    border-radius: 20px;
-    background: linear-gradient(90deg, #1d2332, #222);
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 2px;
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
-}
-
-.toggle-temp {
-    width: 36px;
-    height: 36px;
-    background: linear-gradient(45deg, #ffd700, #ffaa00);
-    border-radius: 50%;
-    position: relative;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.toggle-temp.active {
-    transform: translateX(40px); /* move o círculo para a direita */
-    background: linear-gradient(90deg, #b5dbf8, #8cccfc);
-}
 
 #label-temp {
     color: #fff;
@@ -223,6 +161,11 @@ body {
 }
 
 @keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }

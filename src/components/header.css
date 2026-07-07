@@ -1,6 +1,8 @@
 .header {
     top: 0;
     left: 0;
+    display: flex;
+    align-items: center;
     min-width: 100%;
     padding: 1rem 2rem;
 }
@@ -18,54 +20,39 @@
 }
 
 h2 {
-    color: var(--cor-logo);
+    color: var(--text-100);
     font-size: 20px;
     font-weight: 600;
     user-select: none;
 }
 
 .title-header {
-    background: linear-gradient(90deg, #ff8a33 0%, #ff6a00 50%, #ff4f00 100%);
+    background: var(--color-gradient-laranja);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
 }
 
 input[type="text"] {
-    background-color: #48319D;
+    background-color: var(--color-primary-roxo);
     min-width: 50%;
     height: clamp(30px,35px, 50px);
     border-radius: 30px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid var(--color-border-20);
 }
 
 input::placeholder {
     padding: 20px 20px 20px 30px;
-    color: #FFF;
+    color: var(--text-100);
     font-weight: 400;
     font-size: 15px;
 }
 
-.btn-pesquisa {
-    /* Medidas usando clamp para tamanhos de tela diferente */
-    font-size: clamp(10px, 16px, 18px);
-    padding: clamp(8px, 10px, 12px) clamp(10px, 16px, 18px);
-    border-radius: clamp(6px, 25px, 35px);
-    width: 170px;
-    background: linear-gradient(135deg, #F5F5F9 0%, #DADFE7 100%);
-    box-shadow: inset 2px 2px 1px #FFF,
-        inset -2px -2px 1px #bbbfc7,
-        3px 2px 10px 0 rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    text-wrap: nowrap;
-    font-weight: 600;
-    color: #000;
-}
+
 
 input:focus,
 input:valid {
     padding-left: 30px;
-    color: #FFF;
-    border: rgba(0, 0, 0, 0.3);
+    color: var(--text-100);
+    border-color: rgba(0, 0, 0, 0.3);
 }

@@ -1,8 +1,5 @@
 /* ===== TOGGLE CONTAINER ===== */
 .toggle-container {
-    position: fixed;
-    right: 20px;
-    top: 10px;
     width: 80px;
     height: 40px;
     cursor: pointer;
@@ -118,16 +115,4 @@
     color: #ff4f00;
 }
 
-/* ===== FONT COLORS ===== */
-.black-70 {
-    color: rgba(0, 0, 0, 0.7) !important;
-}
-
-.black-90 {
-    color: rgba(0, 0, 0, 0.9) !important;
-}
-
-.black-100 {
-    color: rgba(0, 0, 0, 1) !important;
-}
 

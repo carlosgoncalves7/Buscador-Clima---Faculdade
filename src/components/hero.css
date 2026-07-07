@@ -1,0 +1,131 @@
+@import url(../global.css);
+
+.hero-container {
+    width: 600px;
+    display: flex;
+    gap: 24px;
+}
+
+.cidade-content {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.cidade-content .data {
+    color: var(--text-70);
+    font-size: 14px;
+    /* text-wrap: nowrap; */
+}
+
+.cidade-content .cidade {
+    color: var(--text-100);
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.cidade-content .vector-clima {
+    width: clamp(30px, 25vw, 200px);
+    height: clamp(30px, 25vw, 200px);
+}
+
+.cidade-content .descricao-clima {
+    color: var(--text-70);
+    font-size: clamp(1rem, 1.3rem, 3rem);
+}
+
+.cidade-content .previsoes-atual span {
+    text-wrap: nowrap;
+}
+
+.cidade-descricao .temperatura {
+    font-size: 130px;
+}
+
+.cidade-descricao ul li {
+    font-size: 26px;
+}
+
+.previsoes-atual ul {
+    position: relative;
+    left: 10px;
+}
+
+.previsoes-atual .temperatura {
+    font-size: clamp(1rem, 11vw, 13rem);
+    background-color: var(--color-white);
+    font-weight: 100;
+    letter-spacing: 1px;
+    padding: 0;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.previsoes-atual .chuva,
+.previsoes-atual .umidade,
+.previsoes-atual .vento {
+    font-size: clamp(0.8rem, 1.8vw, 2rem);
+    color: var(--text-70);
+}
+
+.semanal-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.semanal-container .semanal-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.semanal-container .texto-semanal {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.box-dias {
+    padding: 24px 14px;
+
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    justify-content: space-around;
+    align-items: center;
+
+    background-color: var(--color-box-bg);
+    border: 1px solid var(--color-border);
+
+    box-shadow: var(--shadow-box);
+
+    transition: all 0.2s ease-in-out;
+
+
+
+
+    cursor: pointer;
+}
+
+.box-dias:hover {
+    background-color: var(--color-box-bg-hover);
+}
+
+.box-dias .dia {
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--text-90);
+}
+
+.box-dias img {
+    width: 40px;
+}
+
+.box-dias .graus {
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--text-90);
+}

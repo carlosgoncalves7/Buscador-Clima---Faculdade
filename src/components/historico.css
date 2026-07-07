@@ -1,38 +1,3 @@
-:root{
-    --branco-100: rgba(255, 255, 255, 1);
-    --branco-90: rgba(255, 255, 255, 0.9);
-    --branco-70: rgba(255, 255, 255, 0.7);
-    --cor-bg-dias: rgba(72, 49, 157, 0.2);
-    --cor-bg-body: linear-gradient(135deg, #2E335A 0%, #1C1B33 100%);
-    --cor-temp: rgba(255, 255, 255, 1);
-    --cor-logo: #FFFFFF;
-}
-
-
-.btn-historico {
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    background: linear-gradient(90deg, #1d2332, #222);
-    color: var(--branco-100);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    padding: 10px 15px;
-    border-radius: 20px;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
-    cursor: pointer;
-    font-size: 14px;
-    width: 100px;
-    padding: 3px;
-    min-height: 40px;
-    max-height: max-content;
-    transition: background-color 0.3s ease;
-}
-
-.btn-historico:hover {
-    background: #48319d;
-}
-
 .historico-container {
   position: absolute;
   left: 50%;

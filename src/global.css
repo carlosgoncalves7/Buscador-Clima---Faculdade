@@ -1,9 +1,0 @@
-:root{
-    --branco-100: rgba(255, 255, 255, 1);
-    --branco-90: rgba(255, 255, 255, 0.9);
-    --branco-70: rgba(255, 255, 255, 0.7);
-    --cor-bg-dias: rgba(72, 49, 157, 0.2);
-    --cor-bg-body: linear-gradient(135deg, #2E335A 0%, #1C1B33 100%);
-    --cor-temp: rgba(255, 255, 255, 1);
-    --cor-logo: #FFFFFF;
-}
