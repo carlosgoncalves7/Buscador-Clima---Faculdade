@@ -4,11 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/reset.css">
-    <link rel="stylesheet" href="assets/style.css">
+    
+    <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="src/reset.css">
+    <link rel="stylesheet" href="src/global.css">
+    <link rel="stylesheet" href="src/style.css">
+
     <!-- Link para icones externo -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <title>Document</title>
+    <title>Search for a city (Buscar cidade)</title>
 </head>
 
 <body>
@@ -29,7 +33,7 @@
 
     <header class="header form-box flex-item">
         <form id="formularioClima" class="form">
-            <h2>Buscar Clima</h2>
+            <h2>Buscar Cidade</h2>
             <input id="cidade" type="text" placeholder="Pesquisar...">
             <button class="btn-pesquisa" type="submit">Pesquisar</button>
         </form>
@@ -160,8 +164,7 @@
         </button>
     </div>
 
-    <script src="script/script.js"></script>
-    <script src="script/tema.js"></script>
+    <script type="module" src="main.js"></script>
 
 </body>
 

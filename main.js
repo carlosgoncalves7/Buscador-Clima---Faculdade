@@ -1,25 +1,19 @@
 const form = document.getElementById("formularioClima");
 const toggleTempDiv = document.querySelector(".toggle-temp");
 const labelTemp = document.getElementById("label-temp");
-
-
 let unidade = "C"; 
 let dados = null;
 
 
 //  LOCALSTORAGE (CONFIGURAÇÕES)
-
-
 function carregarConfig() {
     const config = JSON.parse(localStorage.getItem("configClima")) || {};
-
 
     if (config.unidade) {
         unidade = config.unidade;
         toggleTempDiv.classList.toggle("active", unidade === "F");
         labelTemp.textContent = unidade === "F" ? "°F" : "°C";
     }
-
 
     if (config.ultimaCidade) {
         document.getElementById("cidade").value = config.ultimaCidade;
@@ -35,35 +29,23 @@ function salvarConfig(chave, valor) {
 
 
 carregarConfig();
-
-
 // Loader
-
-
 function mostrarLoader() {
     document.getElementById("loader").style.display = "block";
 }
 function esconderLoader() {
     document.getElementById("loader").style.display = "none";
 }
-
-
 // Conversão
 function cToF(c) { return c * 9/5 + 32; }
 function fToC(f) { return (f - 32) * 5/9; }
 
-
 // Toggle °C / °F
-
-
 toggleTempDiv.addEventListener("click", () => {
     toggleTempDiv.classList.toggle("active");
     unidade = toggleTempDiv.classList.contains("active") ? "F" : "C";
 
-
     salvarConfig("unidade", unidade);
-
-
     labelTemp.textContent = unidade === "F" ? "°F" : "°C";
     atualizarTemperatura();
 });
@@ -74,8 +56,6 @@ toggleTempDiv.addEventListener("click", () => {
 
 function atualizarTemperatura() {
     if (!dados) return;
-
-
     let tempAtual = dados.current.temperature_2m;
     if (unidade === "F") tempAtual = cToF(tempAtual);
     document.getElementById("temp-atual").textContent = `${Math.round(tempAtual)}°`;
@@ -98,8 +78,6 @@ function atualizarTemperatura() {
 
 
 // Ícones clima
-
-
 // const weatherIcons = {
 //     0:"sol.svg", 1:"nublado.svg", 2:"nublado.svg", 3:"nublado.svg",
 //     45:"nuvem.svg", 51:"chuva.svg", 61:"chuva.svg", 80:"chuva.svg",
@@ -112,14 +90,9 @@ const weatherIcons = {
 };
 
 
-
 // SALVAR HISTÓRICO NO SERVIDOR
-
-
 function salvarHistorico() {
     if (!dados) return;
-
-
     const registro = {
         cidade: document.getElementById("cidade-atual").textContent,
         temperatura: document.getElementById("temp-atual").textContent,
@@ -127,8 +100,6 @@ function salvarHistorico() {
         unidade: unidade,
         data: new Date().toISOString()
     };
-
-
     fetch("clima.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -144,8 +115,6 @@ function salvarHistorico() {
 
 
 // CARREGAR HISTÓRICO DO SERVIDOR
-
-
 function carregarHistoricoServidor() {
     const container = document.getElementById("historico-lista");
     if (!container) return;
@@ -173,39 +142,28 @@ function carregarHistoricoServidor() {
 
 
 // BOTÃO: MOSTRAR / OCULTAR HISTÓRICO
-
-
 const btnHistorico = document.getElementById("btn-historico");
 const historicoContainer = document.getElementById("historico-container");
-
 
 if (btnHistorico) {
     btnHistorico.addEventListener("click", () => {
         const isVisible = historicoContainer.style.display === "block";
         historicoContainer.style.display = isVisible ? "none" : "block";
 
-
         btnHistorico.textContent = isVisible ? "Mostrar Histórico" : "Ocultar Histórico";
-
 
         if (!isVisible) {
             carregarHistoricoServidor();
         }
     });
 }
-
-
 // Carrega histórico ao entrar no site
 carregarHistoricoServidor();
-
-
 // FETCH PRINCIPAL DE CLIMA
-
-
 form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-
+    // trim() - remove espaços vazios 
     const cidade = document.getElementById("cidade").value.trim();
     if (cidade === "") return alert("Preencha o campo!");
 
