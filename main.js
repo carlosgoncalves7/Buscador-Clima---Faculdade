@@ -7,10 +7,6 @@ let unidade = "C";
 let dados = null;
 
 
-
-
-
-
 //  LOCALSTORAGE (CONFIGURAÇÕES)
 function carregarConfig() {
     const config = JSON.parse(localStorage.getItem("configClima")) || {};
@@ -27,7 +23,6 @@ function carregarConfig() {
         document.getElementById("cidade").value = config.ultimaCidade;
     }
 }
-
 
 function salvarConfig(chave, valor) {
     const config = JSON.parse(localStorage.getItem("configClima")) || {};
@@ -129,24 +124,22 @@ if (btnHistorico) {
 // };
 
 const weatherIcons = {
-    0:"assets/img/Icones_branco/sol.svg", 
-    1:"assets/img/Icones_branco/nuvem.svg", 
-    2:"assets/img/Icones_branco/nuvem.svg", 
-    3:"assets/img/Icones_branco/nuvem.svg",
-    45:"assets/img/Icones_branco/nuvem.svg", 
-    51:"assets/img/Icones_branco/chuva.svg", 
-    61:"assets/img/Icones_branco/chuva.svg", 
-    80:"assets/img/Icones_branco/chuva.svg",
-    95:"assets/img/Icones_branco/trovoada.svg", 
-    71:"assets/img/Icones_branco/neve.svg"
+    0:"src/assets/Icones_branco/sol.svg", 
+    1:"src/assets/Icones_branco/nuvem.svg", 
+    2:"src/assets/Icones_branco/nuvem.svg", 
+    3:"src/assets/Icones_branco/nuvem.svg",
+    45:"src/assets/Icones_branco/nuvem.svg", 
+    51:"src/assets/Icones_branco/chuva.svg", 
+    61:"src/assets/Icones_branco/chuva.svg", 
+    80:"src/assets/Icones_branco/chuva.svg",
+    95:"src/assets/Icones_branco/trovoada.svg", 
+    71:"src/assets/Icones_branco/neve.svg"
 };
 
 // FETCH PRINCIPAL DE CLIMA
-
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
 
     event.preventDefault();
-
     const cidade = document.getElementById("cidade").value.trim();
     if (cidade === "") return alert("Preencha o campo!");
 
@@ -154,37 +147,64 @@ form.addEventListener("submit", (event) => {
     mostrarLoader();
 
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json&countryCode=BR`;
+
+    try {
+        // Fetch para buscar dados da cidade inserida no input
+        const response = await fetch(url)
+        // Tratamento de erro caso a resposta retorne false, 
+        if(!response.ok){
+            console.log("Problema no fetch")
+        }
+        const data = await response.json()
+        // console.log("Olha aqui", data)
+        const cidade = data.results[0]
+        const { longitude, latitude } = cidade
+
+        const urlmeteo = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=sunrise,sunset,daylight_duration,uv_index_max,temperature_2m_max,temperature_2m_min,weathercode&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain&current=apparent_temperature,is_day,precipitation,rain,wind_speed_10m,temperature_2m,relative_humidity_2m,weathercode&timezone=America%2FSao_Paulo`;
+
+        if(!longitude || !latitude){
+            return alert("Insira cidade válida")
+        }
+
+        const responseMeteo = await fetch(urlmeteo)
+        if(!responseMeteo.ok){
+            return console.log("Erro ao buscar clima")
+        }
+        const dataMeteo = await responseMeteo.json()
+
+
+        
+    } catch (error){
+        console.error("Error fetching data:", error);
+    }
     fetch(url)
         .then(res => res.json())
         .then(local => {
 
-            console.log(local)
             if (!local.results) {
                 esconderLoader();
                 return alert("Cidade não Encontrada!");
             }
+            const data = local.results[0];
+            const dataCity = { 
+                cidade: data.name, 
+                latitude: data.latitude, 
+                longitude: data.longitude 
+            };
 
 
-            const resultado = local.results[0];
-            const dadosCidade = { 
-                cidade: resultado.name, 
-                latitude: resultado.latitude, 
-                longitude: resultado.longitude };
+            const urlCity = `https://api.open-meteo.com/v1/forecast?latitude=${dataCity.latitude}&longitude=${dataCity.longitude}&daily=sunrise,sunset,daylight_duration,uv_index_max,temperature_2m_max,temperature_2m_min,weathercode&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain&current=apparent_temperature,is_day,precipitation,rain,wind_speed_10m,temperature_2m,relative_humidity_2m,weathercode&timezone=America%2FSao_Paulo`;
 
 
-            const urlCidade = `https://api.open-meteo.com/v1/forecast?latitude=${dadosCidade.latitude}&longitude=${dadosCidade.longitude}&daily=sunrise,sunset,daylight_duration,uv_index_max,temperature_2m_max,temperature_2m_min,weathercode&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain&current=apparent_temperature,is_day,precipitation,rain,wind_speed_10m,temperature_2m,relative_humidity_2m,weathercode&timezone=America%2FSao_Paulo`;
-
-
-            return fetch(urlCidade)
+            return fetch(urlCity)
                 .then(res => res.json())
-                .then(apiDados => {
+                .then(data => {
 
-                    console.log(apiDados);
-                    dados = apiDados;
+                    console.log(data);
+                    dados = data;
 
 
-                    document.getElementById("cidade-atual").textContent = dadosCidade.cidade;
-
+                    document.getElementById("cidade-atual").textContent = dataCity.cidade;
 
                     const dataAtual = new Date();
                     const dias = ["Domingo","Segunda-Feira","Terça-Feira","Quarta-Feira","Quinta-Feira","Sexta-Feira","Sábado"];
