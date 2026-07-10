@@ -1,49 +1,64 @@
 .header {
+    position: fixed;
     top: 0;
     left: 0;
     display: flex;
     align-items: center;
     min-width: 100%;
     padding: 1rem 2rem;
+    height: 70px;
+
+    background-color: var(--blue-500);
+}
+
+.nav {
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
 }
 
 .form {
-    width: 80%;
-    max-width: 95%;
+    position: relative;
     display: flex;
+
     flex-direction: row;
-    align-items: center;
-    gap: 20px;
-    display: flex;
     justify-content: center;
+    align-items: center;
+
+    gap: 20px;
     height: 100%;
 }
 
-h2 {
-    color: var(--text-100);
-    font-size: 20px;
-    font-weight: 600;
-    user-select: none;
+.form .btn-form {
+    position: absolute;
+    right: 6px;
 }
 
 .title-header {
-    background: var(--color-gradient-laranja);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    color: var(--color-white);
+    font-size: 22px;
+    font-weight: 700;
+
+    user-select: none;
 }
 
-input[type="text"] {
-    background-color: var(--color-primary-roxo);
+.input-form {
+    background-color: var(--color-white);
+
+    padding: 12px 16px 12px;
     min-width: 50%;
-    height: clamp(30px,35px, 50px);
+    height: 32px;
     border-radius: 30px;
-    border: 2px solid var(--color-border-20);
+    width: 600px;
+    color: var(--blue-500);
 }
 
 input::placeholder {
-    padding: 20px 20px 20px 30px;
-    color: var(--text-100);
+    /* padding: 20px 20px 20px 30px; */
+    color: var(--blue-500);
     font-weight: 400;
     font-size: 15px;
 }
@@ -52,7 +67,5 @@ input::placeholder {
 
 input:focus,
 input:valid {
-    padding-left: 30px;
-    color: var(--text-100);
     border-color: rgba(0, 0, 0, 0.3);
 }
