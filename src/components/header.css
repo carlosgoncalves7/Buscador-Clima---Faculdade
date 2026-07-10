@@ -46,9 +46,9 @@
     justify-content: center;
 }
 
-.btn-form > img {
+/* .btn-form > img {
     height: 100%;
-}
+} */
 .btn-form:hover{
     transition: all .3s ease ;
     background-color: rgba(192, 192, 192, 0.2);
