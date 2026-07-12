@@ -1,15 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 /* O css possui varios import isso adiciona render blocking e dificulta depuração */
+@import url(components/buttons.css);
 @import url(components/header.css);
 @import url(components/hero.css);
-
-@import url(components/low-content.css);
-@import url(global.css);
-@import url(components/tema.css);
-@import url(components/historico.css);
 @import url(components/layout.css);
-@import url(components/buttons.css);
 
 
 :root {
@@ -23,33 +18,28 @@
     --color-black-100: rgba(0, 0, 0, 1);
 
     --color-white: rgba(255, 255, 255, 1);
+    --color-gray-300: rgba(255, 255, 255, 0.);
+    --blue-500: rgba(18, 77, 241, 1);
+    --blue-900: rgba(2, 2, 10, 1);
 
-    --color-primary-roxo: rgba(72, 49, 157, 1);
-
+    /* --color-primary-roxo: rgba(72, 49, 157, 1);
     --color-box-bg: rgba(72, 49, 157, 0.2);
     --color-box-bg-hover: rgba(72, 49, 157, 1);
-
     --color-box-hover: rgba(72, 49, 157, 0.4);
-
     --color-border-20: rgba(255, 255, 255, 0.2);
     --color-border-50: rgba(255, 255, 255, 0.5);
     --color-border-70: rgba(255, 255, 255, 0.5);
-
     --color-bg-white-60: rgba(255, 255, 255, 0.6);
-
     --color-bg-gradient: linear-gradient(135deg, #2E335A 0%, #1C1B33 100%);
     --cor-temp: rgba(255, 255, 255, 1);
     --cor-logo: #FFFFFF;
     --roxo-color: #48319D;
-
-
-
     --shadow-btn: inset 2px 2px 1px #FFF,
         inset -2px -2px 1px #bbbfc7,
         3px 2px 10px 0 rgba(0, 0, 0, 0.2);
 
     --shadow-box: inset 1px 1px 0px rgba(255, 255, 255, 0.25),
-        4px 3px 10px rgba(0, 0, 0, 0.25);
+        4px 3px 10px rgba(0, 0, 0, 0.25); */
 }
 
 html .light {
@@ -82,15 +72,18 @@ body {
     color: #FFF;
     min-width: 100%;
     font-style: normal;
-    background: linear-gradient(135deg, #2E335A 0%, #1C1B33 100%);
+    background: linear-gradient(180deg, #FFF 0%, #F2F2F2 50%, #FFF 100%);
     background-repeat: no-repeat;
 }
 
 .main-container {
+    position: relative;
+    top: 90px;
     display: flex;
+    flex-direction: column;
     column-gap: 40px;
 
-    width: 1047px;
+    /* width: 1047px; */
     max-width: 1280px;
     /* height: 538px; */
     margin: 0 auto;
@@ -104,17 +97,83 @@ body {
     backdrop-filter: blur(26px);
 }
 
-.low-scale {
-    max-width: 100%;
-    height: 30%;
-    margin-left: auto;
-    margin-right: auto;
+.detalhes-dia {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap: 14px;
 }
 
-.low-content {
-    background-color: rgba(0, 0, 0, 0.3);
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
+.detalhes-dia > .box {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 120px;
+    min-height: 82px;
+    padding: 10px 12px;
+    gap: 8px;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.detalhes-dia > .box-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    min-width: 120px;
+    min-height: 82px;
+    padding: 10px 12px;
+    gap: 8px;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.detalhes-dia > .box-grid .align-box {
+    display: flex;
+    flex-direction: column; 
+    gap: 8px;
+}
+
+.detalhes-dia > .box-grid .valor {
+    font-size: 20px; 
+    font-weight: 600;
+
+    width: 100%;
+    text-align: right;
+}
+
+.detalhes-dia > .box .align-box {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.detalhes-dia > .box .align-box  .valor {
+    text-align: right;
+    width: 100%;
+}
+
+.detalhes-dia > .box .titulo, .detalhes-dia > .box-grid .titulo {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.detalhes-dia > .box  .subtitulo {
+    font-size: 8px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.detalhes-dia > .box  .valor {
+    font-size: 20px; 
+    font-weight: 600;
+
+    text-align: right;
 }
 
 .container:before {
@@ -136,7 +195,6 @@ body {
     border-radius: 50%;
     filter: blur(100px);
 }
-
 
 #label-temp {
     color: #fff;
