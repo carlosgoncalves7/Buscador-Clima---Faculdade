@@ -1,280 +1,196 @@
+// import carregarConfig from "./src/config.js";
+import { mostrarLoader, esconderLoader } from "./src/scripts/loader.js";
+import Hero from "./src/scripts/hero.js"
+import WeekCards from "./src/scripts/weekCards.js";
+
+
 const form = document.getElementById("formularioClima");
 const labelTemp = document.getElementById("label-temp");
 
-const toggleTempDiv = document.querySelector(".toggle-temp");
+let cidadeContainer = document.querySelector(".cidade-container")
 
-let unidade = "C"; 
+let semanaContainer = document.getElementById("week-container")
+
+const url = (cidade) => `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json&countryCode=BR`;
+
+const urlmeteo = ({ latitude, longitude }) => `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=sunrise,sunset,daylight_duration,uv_index_max,temperature_2m_max,temperature_2m_min,weathercode&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain&current=apparent_temperature,is_day,precipitation,rain,wind_speed_10m,temperature_2m,relative_humidity_2m,weathercode&timezone=America%2FSao_Paulo`;
+
+let unidade = "C";
 let dados = null;
 
+// function setupCounter(element) {
+//     let counter = 0
+//     const setCounter = (count) => {
+//         counter = count
+//         element.innerHTML = `Count is ${counter}`
+//     }
+//     element.addEventListener('click', () => setCounter(counter + 1))
+//     setCounter(0)
+// }
 
-//  LOCALSTORAGE (CONFIGURAÇÕES)
-function carregarConfig() {
-    const config = JSON.parse(localStorage.getItem("configClima")) || {};
+const weekContent = document.querySelector(".week-content")
+const conditionsCurrent = document.querySelector(".current-conditions")
+
+// function Hero(hero) {
+//     return `<div class="cidade-content">
+//                 <div class="text-content">
+//                 <h2 class="cidade">${hero.city.name}</h2>
+//                 <span class="data">${hero.time.value}</span>
+//                 </div>
+//                 <div class="flex-content">
+//                 <img src="src/assets/light-icon/${weathericons[hero.weathercode]}" alt="" class="vector-clima"></img>
+//                 <span class="temperatura">${hero.temperature.value}<span class="units">°C</span></span>
+//                 </div
+//             </div>`
+// }
+
+function CardsHero(details) {
+    return `
+        <div class="card">
+            <p class="titulo">${details.name}</p>
+            <span class="valor">${details.value}${details.units}</span>
+        </div>`
+}
 
 
-    if (config.unidade) {
-        unidade = config.unidade;
-        toggleTempDiv.classList.toggle("active", unidade === "F");
-        labelTemp.textContent = unidade === "F" ? "°F" : "°C";
+
+// function createCardCurrentDay(curr) {
+//     //const div = document.createElement("div")
+//     //div.setAttribute("class", "box-dias")
+//     //div.innerHTML =
+//     return `<div class="card">
+//                 <p class="titulo">${curr.name}</p>
+//                 <span class="valor">${curr.value}</span>
+//             </div>`
+//     //weekContent.appendChild(div)
+// }
+
+function transformCurrentCity(current, unidade, cidade) {
+    return {
+        city: {
+            name: cidade.name,
+            uf: cidade.admin1,
+            country: {
+                name: cidade.country,
+                code: cidade.country_code
+            }
+        },
+        details: [
+            {
+                value: current.precipitation,
+                units: unidade.precipitation,
+                name: "Precipitação"
+            },
+            {
+                value: current.rain,
+                units: unidade.rain,
+                name: "Chuva"
+            },
+            {
+                value: current.relative_humidity_2m,
+                units: unidade.relative_humidity_2m,
+                name: "Humidade"
+            },
+            {
+                value: current.wind_speed_10m,
+                units: unidade.wind_speed_10m,
+                name: "Vento"
+            },
+        ],
+        temperature: {
+            value: Math.round(current.temperature_2m),
+            units: Math.round(unidade.temperature_2m),
+            apparent: Math.round(current.apparent_temperature),
+            name: "Temperatura"
+        },
+        time: {
+            value: current.time,
+            units: unidade.time,
+        },
+        weathercode: current.weathercode
     }
+}
 
-
-    if (config.ultimaCidade) {
-        document.getElementById("cidade").value = config.ultimaCidade;
+function transformData(daily) {
+    let data = []
+    for (let i = 1; i < daily.time.length; i++) {
+        data.push(
+            {
+                time: daily.time[i],
+                daylight_duration: daily.daylight_duration[i],
+                sunrise: daily.sunrise[i],
+                sunset: daily.sunset[i],
+                temperature_max: Math.round(daily.temperature_2m_max[i]),
+                temperature_min: Math.round(daily.temperature_2m_min[i]),
+                uv_index_max: daily.uv_index_max[i],
+                weathercode: daily.weathercode[i]
+            }
+        )
     }
-}
-
-function salvarConfig(chave, valor) {
-    const config = JSON.parse(localStorage.getItem("configClima")) || {};
-    config[chave] = valor;
-    localStorage.setItem("configClima", JSON.stringify(config));
-}
-
-carregarConfig();
-
-// Loader
-function mostrarLoader() {
-    document.getElementById("loader").style.display = "block";
-}
-function esconderLoader() {
-    document.getElementById("loader").style.display = "none";
-}
-
-// Conversão
-function cToF(c) { return c * 9/5 + 32; }
-function fToC(f) { return (f - 32) * 5/9; }
-
-
-// Toggle °C / °F
-toggleTempDiv.addEventListener("click", () => {
-    toggleTempDiv.classList.toggle("active");
-    unidade = toggleTempDiv.classList.contains("active") ? "F" : "C";
-
-    salvarConfig("unidade", unidade);
-
-    labelTemp.textContent = unidade === "F" ? "°F" : "°C";
-    atualizarTemperatura();
-});
-
-
-// Atualiza temperaturas
-function atualizarTemperatura() {
-    if (!dados) return;
-
-
-    let tempAtual = dados.current.temperature_2m;
-    if (unidade === "F") tempAtual = cToF(tempAtual);
-    document.getElementById("temp-atual").textContent = `${Math.round(tempAtual)}°`;
-
-    let tempMax = dados.daily.temperature_2m_max[0];
-    let tempMin = dados.daily.temperature_2m_min[0];
-    if (unidade === "F") { tempMax = cToF(tempMax); tempMin = cToF(tempMin); }
-    document.getElementById("max-min").textContent = `${Math.round(tempMax)}° | ${Math.round(tempMin)}°`;
-
-
-    const boxes = document.querySelectorAll(".box-dias");
-    for (let i = 0; i < boxes.length; i++) {
-        let max = dados.daily.temperature_2m_max[i];
-        let min = dados.daily.temperature_2m_min[i];
-        if (unidade === "F") { max = cToF(max); min = cToF(min); }
-        boxes[i].querySelector(".graus").textContent = `${Math.round(max)}° / ${Math.round(min)}°`;
-    }
+    return data
 }
 
 
-// Ícones clima
-// const weatherIcons = {
-//     0:"sol.svg", 1:"nublado.svg", 2:"nublado.svg", 3:"nublado.svg",
-//     45:"nuvem.svg", 51:"chuva.svg", 61:"chuva.svg", 80:"chuva.svg",
-//     95:"trovoada.svg", 71:"neve.svg"
-// };
 
-
-// BOTÃO: MOSTRAR / OCULTAR HISTÓRICO
-const btnHistorico = document.getElementById("btn-historico");
-const historicoContainer = document.getElementById("historico-container");
-
-
-if (btnHistorico) {
-    btnHistorico.addEventListener("click", () => {
-        const isVisible = historicoContainer.style.display === "block";
-        historicoContainer.style.display = isVisible ? "none" : "block";
-
-
-        btnHistorico.textContent = isVisible ? "Mostrar Histórico" : "Ocultar Histórico";
-
-
-        if (!isVisible) {
-            carregarHistoricoServidor();
-        }
-    });
-}
-
-// const weatherIcons = {
-//     0:"☀️", 
-//     1:"🌥️", 
-//     2:"🌥️", 
-//     3:"🌥️",
-//     45:"nuvem.svg", 
-//     51:"🌧️", 
-//     61:"🌧️", 
-//     80:"🌧️",
-//     95:"⛈️", 
-//     71:"🌨️"
-// };
-
-const weatherIcons = {
-    0:"src/assets/Icones_branco/sol.svg", 
-    1:"src/assets/Icones_branco/nuvem.svg", 
-    2:"src/assets/Icones_branco/nuvem.svg", 
-    3:"src/assets/Icones_branco/nuvem.svg",
-    45:"src/assets/Icones_branco/nuvem.svg", 
-    51:"src/assets/Icones_branco/chuva.svg", 
-    61:"src/assets/Icones_branco/chuva.svg", 
-    80:"src/assets/Icones_branco/chuva.svg",
-    95:"src/assets/Icones_branco/trovoada.svg", 
-    71:"src/assets/Icones_branco/neve.svg"
-};
 
 // FETCH PRINCIPAL DE CLIMA
 form.addEventListener("submit", async (event) => {
-
     event.preventDefault();
-    const cidade = document.getElementById("cidade").value.trim();
-    if (cidade === "") return alert("Preencha o campo!");
 
-    salvarConfig("ultimaCidade", cidade);
+    const inputcidade = document.getElementById("cidade").value.trim();
+    if (inputcidade === "") return alert("Preencha o campo!");
+
+    // salvarConfig("ultimaCidade", cidade);
     mostrarLoader();
 
-    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json&countryCode=BR`;
-
     try {
-        // Fetch para buscar dados da cidade inserida no input
-        const response = await fetch(url)
+        // Fetch para buscar longitude e latitude da cidade
+        const response = await fetch(url(inputcidade))
         // Tratamento de erro caso a resposta retorne false, 
-        if(!response.ok){
+        if (!response.ok) {
             console.log("Problema no fetch")
         }
         const data = await response.json()
         // console.log("Olha aqui", data)
         const cidade = data.results[0]
         const { longitude, latitude } = cidade
-
-        const urlmeteo = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=sunrise,sunset,daylight_duration,uv_index_max,temperature_2m_max,temperature_2m_min,weathercode&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain&current=apparent_temperature,is_day,precipitation,rain,wind_speed_10m,temperature_2m,relative_humidity_2m,weathercode&timezone=America%2FSao_Paulo`;
-
-        if(!longitude || !latitude){
+        if (!longitude || !latitude) {
             return alert("Insira cidade válida")
         }
-
-        const responseMeteo = await fetch(urlmeteo)
-        if(!responseMeteo.ok){
+        // Fetch para buscar dados completo de clima da cidade
+        const responseMeteo = await fetch(urlmeteo({ longitude, latitude }))
+        if (!responseMeteo.ok) {
             return console.log("Erro ao buscar clima")
         }
         const dataMeteo = await responseMeteo.json()
+        const { current, current_units, daily } = dataMeteo
+
+        // Modelando os dados de clima semanais vindo da api e adicionando ao array
+        const previsaoSemanal = transformData(daily)
+        // Modelando os dados de clima atual vindo da api
+        const climateDay = transformCurrentCity(current, current_units, cidade)
+        //console.log("Atual: ", climateDay)
+
+        // Criando o componente da hero dinamicamente
+        cidadeContainer.innerHTML = Hero(climateDay)
+
+        // Mapeando dinamicamente os dados direto no html
+        weekContent.innerHTML = previsaoSemanal.map(WeekCards).join('')
+        conditionsCurrent.innerHTML = climateDay.details.map(CardsHero).join('')
+
+        //currentDay.details.forEach()
+        // if (previsaoSemanal) {
+        //     semanaBox.innerHTML = ""
+        // } else {
+        //     semanaBox.innerHTML = "<span class='error-semana'>Sem dados para exibir</span>"
+        //     console.log(previsaoSemanal)
+        //     return
+        // }
 
 
-        
-    } catch (error){
+    } catch (error) {
         console.error("Error fetching data:", error);
+    } finally {
+        esconderLoader()
     }
-    fetch(url)
-        .then(res => res.json())
-        .then(local => {
-
-            if (!local.results) {
-                esconderLoader();
-                return alert("Cidade não Encontrada!");
-            }
-            const data = local.results[0];
-            const dataCity = { 
-                cidade: data.name, 
-                latitude: data.latitude, 
-                longitude: data.longitude 
-            };
-
-
-            const urlCity = `https://api.open-meteo.com/v1/forecast?latitude=${dataCity.latitude}&longitude=${dataCity.longitude}&daily=sunrise,sunset,daylight_duration,uv_index_max,temperature_2m_max,temperature_2m_min,weathercode&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain&current=apparent_temperature,is_day,precipitation,rain,wind_speed_10m,temperature_2m,relative_humidity_2m,weathercode&timezone=America%2FSao_Paulo`;
-
-
-            return fetch(urlCity)
-                .then(res => res.json())
-                .then(data => {
-
-                    console.log(data);
-                    dados = data;
-
-
-                    document.getElementById("cidade-atual").textContent = dataCity.cidade;
-
-                    const dataAtual = new Date();
-                    const dias = ["Domingo","Segunda-Feira","Terça-Feira","Quarta-Feira","Quinta-Feira","Sexta-Feira","Sábado"];
-                    const meses = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
-                    document.getElementById("data-atual").textContent = `${dias[dataAtual.getDay()]}, ${dataAtual.getDate()} ${meses[dataAtual.getMonth()]}`;
-
-
-                    let descricao = "";
-                    if (dados.current.rain > 0) descricao = "Chuvoso";
-                    else if (dados.current.precipitation > 0) descricao = "Possibilidade de Chuva";
-                    else if (dados.current.is_day === 1) descricao = "Ensolarado";
-                    else descricao = "Noite Limpa";
-                    document.getElementById("descricao-atual").textContent = descricao;
-
-
-                    document.getElementById("umidade-atual").textContent = `Umidade: ${dados.current.relative_humidity_2m}%`;
-                    document.getElementById("chuva-atual").textContent = `Chuva: ${dados.hourly.precipitation_probability[0]}%`;
-                    document.getElementById("vento-atual").textContent = `Vento: ${dados.current.wind_speed_10m} km/h`;
-
-
-                    document.getElementById("precipitação").textContent = `${dados.current.precipitation} mm`;
-                    document.getElementById("ind-uvMax").textContent = dados.daily.uv_index_max[0];
-                    
-                    const formatarHora = (h) => h.split("T")[1].substring(0, 5);
-                    document.getElementById("nascer-sol").textContent = formatarHora(dados.daily.sunrise[0]);
-                    document.getElementById("por-sol").textContent = formatarHora(dados.daily.sunset[0]);
-                    document.getElementById("vento").textContent = `${dados.current.wind_speed_10m} km/h`;
-
-
-                    const codigoAtual = dados.current.weathercode ?? 0;
-                    document.getElementById("img-iconeAtual").setAttribute("src", `${weatherIcons[codigoAtual] || "assets/img/Icones_branco/sol.svg"}`);
-
-
-                    const boxes = document.querySelectorAll(".box-dias");
-                    const diasSemana = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
-
-
-                    for (let i = 0; i < 7; i++) {
-                        const box = boxes[i];
-                        const dataDia = new Date(dados.daily.time[i]);
-                        const nomeDia = diasSemana[dataDia.getDay()];
-
-
-                        let tempMax = Math.round(dados.daily.temperature_2m_max[i]);
-                        let tempMin = Math.round(dados.daily.temperature_2m_min[i]);
-                        if (unidade === "F") {
-                            tempMax = cToF(tempMax);
-                            tempMin = cToF(tempMin);
-                        }
-
-
-                        const codigo = dados.daily.weathercode[i];
-                        const icone = weatherIcons[codigo] || "assets/img/Icones_branco/sol.svg";
-
-
-                        box.querySelector(".dia").textContent = nomeDia;
-                        box.querySelector(".graus").textContent = `${Math.round(tempMax)}° / ${Math.round(tempMin)}°`;
-                        box.querySelector(".img").setAttribute("src", `${icone}`);
-                    }
-
-
-                    atualizarTemperatura();
-                    esconderLoader();
-                    // SALVAR HISTÓRICO
-                    // salvarHistorico();
-                });
-        })
-        .catch(err => {
-            esconderLoader();
-            alert("Erro ao buscar dados do clima.");
-            console.error(err);
-        });
 });
