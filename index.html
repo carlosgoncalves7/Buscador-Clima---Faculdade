@@ -4,168 +4,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="src/reset.css">
-    <link rel="stylesheet" href="src/global.css">
     <link rel="stylesheet" href="src/style.css">
-
+    <link rel="stylesheet" href="src/components/toggle.css">
+    <link rel="stylesheet" href="src/components/historico.css">
     <!-- Link para icones externo -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <title>Search for a city (Buscar cidade)</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+        --color-clifford: #da373d;
+      }
+    </style>
+    <title>Search for a city - Buscar cidade</title>
 </head>
 
 <body>
-
-
     <div id="loader" class="loader" style="display:none;"></div>
 
     <div class="circulo"></div>
 
-    <header class="header form-box flex-item">
-        <div class="nav">
+    <header class="header form-box">
+        <nav class="nav">
+            <h2 class="title-header">Buscar Cidade</h2>
             <form id="formularioClima" class="form">
-                <h2>Buscar Clima</h2>
-                <span>Cidade</span>
-                <input id="cidade" type="text" placeholder="Pesquisar...">
-                <button id="btn-pesquisa" class="btn-pesquisa" type="submit"><span>Pesquisar</span> <img class="search" src="assets/img/search.svg" alt=""></button>
+                <input id="cidade" class="input-form" type="text" placeholder="Pesquisar uma cidade...">
+                <button id="btn-pesquisa" class="btn-form" type="submit">
+                    <img src="src/assets/lupa.png" alt="Lupa de pesquisa">
+                </button>
             </form>
-        </div>
-        <div class="toggle-container">
+        </nav>
+        <!-- <div class="toggle-container">
             <div translate="no" class="toggle">
                 <div class="emoji moon">🌑</div>
                 <div class="emoji sun">☀️</div>
             </div>
-        </div>
-        <div class="toggle-container-temp">
+        </div> -->
+        <!-- <div class="toggle-container-temp">
             <div class="toggle-temp"></div>
             <span id="label-temp">°C</span>
-        </div>
+        </div> -->
     </header>
 
     <main class="main-container">
-            <div class="hero-container">
-                <div class="cidade-content">
-                    <p id="data-atual" class="data cor-70"></p>
-                    <p id="cidade-atual" class="cidade cor-100"></p>
-                    <img id="img-iconeAtual" alt="" class="vector-clima"></img>
-                    <span id="descricao-atual" class="descricao-clima cor-70"></span>
-                </div>
-
-                <div class="cidade-descricao">
-                    <span id="temp-atual" class="temperatura"></span>
-                    <ul>
-                        <li id="chuva-atual" class="chuva cor-70"></li>
-                        <li id="umidade-atual" class="umidade cor-70"></li>
-                        <li id="vento-atual" class="vento cor-70"></li>
-                    </ul>
-                </div>
+        <div class="cidade-container">
+            <!-- <div class="cidade-content">
+                <p class="data">22/11/2026</p>
+                <p class="cidade">Sud Mennucci</p>
+                <img src="src/assets/icones_branco/sol.svg" alt="" class="vector-clima"></img>
+                <span id="descricao-atual" class="descricao-clima"></span>
             </div>
 
-            <div class="semanal-container">
-                <span class="texto-semanal cor-70">Previsão Semanal</span>
-
-                <div id="semanal-boxs" class="semanal-box">
-
-                    <div class="box-dias">
-                        <span class="dia"></span>
-                        <img class="img"></img>
-                        <span class="graus"></span>
-                    </div>
-
-                    <div class="box-dias">
-                        <span class="dia"></span>
-                        <img class="img"></img>
-                        <span class="graus"></span>
-                    </div>
-
-                    <div class="box-dias">
-                        <span class="dia"></span>
-                        <img class="img"></img>
-                        <span class="graus"></span>
-                    </div>
-
-                    <div class="box-dias">
-                        <span class="dia"></span>
-                        <img class="img"></img>
-                        <span class="graus"></span>
-                    </div>
-
-                    <div class="box-dias">
-                        <span class="dia"></span>
-                        <img class="img"></img>
-                        <span class="graus"></span>
-                    </div>
-
-                    <div class="box-dias">
-                        <span class="dia"></span>
-                        <img class="img"></img>
-                        <span class="graus"></span>
-                    </div>
-
-                    <div class="box-dias">
-                        <span class="dia"></span>
-                        <img class="img"></img>
-                        <span class="graus"></span>
-                    </div>
-
-                </div>
-            </div>
-
-        <div style="display: none;" class="low-content low-scale">
-            <div class="box-low">
-                <span class="titulo">Alta|Baixa</span>
-                <p id="max-min" class="valor"></p>
-                <hr class="hr-linear">
-            </div>
-
-            <div class="box-low">
-                <span class="titulo">PRECIPITAÇÃO</span>
-                <p id="precipitação" class="valor"></p>
-                <hr class="hr-branco">
-                <span class="subtitulo">Nas próximas horas</span>
-            </div>
-
-            <div class="box-low">
-                <span class="titulo">ÍNDICE UV MAX</span>
-                <p id="ind-uvMax" class="valor"></p>
-                <p class="valor"></p>
-                <hr class="hr-linear">
-            </div>
-
-            <div class="box-low">
-                <span class="titulo">Nascer do Sol</span>
-                <p id="nascer-sol" class="valor"></p>
-                <hr class="hr-branco">
-                <span class="subtitulo">Por do Sol</span>
-                <p id="por-sol" class="valor"></p>
-            </div>
-
-            <div class="box-low">
-                <span class="titulo">VENTOS</span>
-                <p id="vento" class="valor"></p>
-                <hr class="hr-branco">
-            </div>
+            <div class="cidade-descricao">
+                <span id="temp-atual" class="temperatura">26°C</span>
+                <ul>
+                    <li class="chuva">Chuva: 80%</li>
+                    <li class="umidade">Umidade: 76%</li>
+                    <li class="vento">Vento: 26km/h</li>
+                </ul>
+            </div> -->
         </div>
+        
+        <div class="conditions-container">
+            <span class="texto-semanal">Condiçoes Atuais</span>
+            <div class="current-conditions"></div>
+            <!-- <div class="card-grid">
+                <div class="align-box">
+                    <p class="titulo">Nascer do Sol</p>
+                    <span class="valor">N/A</span>
+                </div>
+                <div class="align-box">
+                    <p class="titulo">Por do sol</p>
+                    <span class="valor">N/A</span>
+                </div>
+            </div> -->
+        </div>
+        <div class="week-container">
+            <span class="texto-semanal">Previsão Semanal</span>
+            <div class="week-content"></div>
+        </div>
+
     </main>
 
-    <button class="btn-historico" id="btn-historico">
-        Historico
-    </button>
-
-    <div id="historico-container" class="historico-container" style="display: none;">
-        <h2>Histórico de Pesquisas</h2>
-
-        <div id="historico-lista" class="historico-lista">
-
-        </div>
-        <!-- O botao limpar nao esta funcionando ainda -->
-        <button id="btn-limpar-historico" class="btn-limpar">
-            Limpar Histórico
-        </button>
-    </div>
-
-    <script type="module" src="main.js"></script>
+    <!-- <script type="module" src="script.js"></script> -->
+    <script type="module" src="./main.js"></script>
 
 </body>
 
