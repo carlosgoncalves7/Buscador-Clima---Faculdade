@@ -1,16 +1,17 @@
-export default function WeekCards(prev) {
+export function WeekCards(prev) {
     const weathericons = {
-    0: "sol.svg",
-    1: "nuvem.svg",
-    2: "nuvem.svg",
-    3: "nuvem.svg",
-    45: "nuvem.svg",
-    51: "chuva.svg",
-    61: "chuva.svg",
-    80: "chuva.svg",
-    95: "trovoada.svg",
-    71: "neve.svg"
-};
+        0: "sol.svg",
+        1: "nuvem.svg",
+        2: "nuvem.svg",
+        3: "nuvem.svg",
+        45: "nuvem.svg",
+        51: "chuva.svg",
+        61: "chuva.svg",
+        80: "chuva.svg",
+        95: "trovoada.svg",
+        71: "neve.svg"
+    };
+    
     //const div = document.createElement("div")
     //div.setAttribute("class", "box-dias")
     const days =  ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"]
