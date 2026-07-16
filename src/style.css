@@ -3,7 +3,7 @@
 /* O css possui varios import isso adiciona render blocking e dificulta depuração */
 @import url(components/buttons.css);
 @import url(components/header.css);
-@import url(components/hero.css);
+@import url(components/prev-semanal.css);
 @import url(components/layout.css);
 
 
@@ -61,6 +61,8 @@ html .light {
     --color-gradient-laranja: linear-gradient(90deg, #ff8a33 0%, #ff6a00 50%, #ff4f00 100%);
 }
 
+
+
 .flex-item {
     display: flex;
     justify-content: center;
@@ -79,9 +81,12 @@ body {
 .main-container {
     position: relative;
     top: 90px;
-    display: flex;
-    flex-direction: column;
-    column-gap: 40px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 48px;
+    row-gap: 24px;
+
+    justify-items: center;
 
     /* width: 1047px; */
     max-width: 1280px;
@@ -92,22 +97,48 @@ body {
     border-radius: 46px 46px 30px 30px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.00);
 
-    background: linear-gradient(156deg, rgba(46, 51, 90, 0.20) 5.86%, rgba(28, 27, 51, 0.20) 84.56%);
+    /* background: linear-gradient(156deg, rgba(46, 51, 90, 0.20) 5.86%, rgba(28, 27, 51, 0.20) 84.56%);
     box-shadow: 0.928px 0.928px 0 0 rgba(255, 255, 255, 0.25) inset, 0 1.055px 0 0 #FFF inset;
-    backdrop-filter: blur(26px);
+    backdrop-filter: blur(26px); */
 }
 
-.detalhes-dia {
+.conditions-container {
     width: 100%;
 
     display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+
+    gap: 14px;
+    padding: 24px;
+}
+
+.current-conditions {
+    width: 300px;
+
+    display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
 
     gap: 14px;
+
+    
 }
 
-.detalhes-dia > .box {
+@keyframes cardIn {
+    0% {
+        opacity: 0.6;
+        transform: translateX(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+.current-conditions > .card {
     display: flex;
     flex-direction: column;
 
@@ -116,10 +147,17 @@ body {
     padding: 10px 12px;
     gap: 8px;
     border-radius: 12px;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.85);
+
+    transition: background .3s ease;
+    animation: cardIn 0.5s ease;
 }
 
-.detalhes-dia > .box-grid {
+.current-conditions > .card:hover{
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.current-conditions > .card-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
 
@@ -129,15 +167,17 @@ body {
     gap: 8px;
     border-radius: 12px;
     background-color: rgba(0, 0, 0, 0.8);
+
+    animation: cardIn 0.5s ease;
 }
 
-.detalhes-dia > .box-grid .align-box {
+.current-conditions > .card-grid .align-box {
     display: flex;
     flex-direction: column; 
     gap: 8px;
 }
 
-.detalhes-dia > .box-grid .valor {
+.current-conditions > .card-grid .valor {
     font-size: 20px; 
     font-weight: 600;
 
@@ -145,57 +185,36 @@ body {
     text-align: right;
 }
 
-.detalhes-dia > .box .align-box {
+.current-conditions > .card .align-box {
     display: flex;
     flex-direction: column;
 
     gap: 6px;
 }
 
-.detalhes-dia > .box .align-box  .valor {
+.current-conditions > .card .align-box  .valor {
     text-align: right;
     width: 100%;
 }
 
-.detalhes-dia > .box .titulo, .detalhes-dia > .box-grid .titulo {
+.current-conditions > .card .titulo, .current-conditions > .box-grid .titulo {
     font-size: 10px;
     font-weight: 400;
     text-transform: uppercase;
 }
 
-.detalhes-dia > .box  .subtitulo {
+.current-conditions > .card .subtitulo {
     font-size: 8px;
     font-weight: 400;
     text-transform: uppercase;
 }
 
-.detalhes-dia > .box  .valor {
+.current-conditions > .card .valor {
     font-size: 20px; 
     font-weight: 600;
 
     text-align: right;
 }
-
-.container:before {
-    content: "";
-    width: 30%;
-    height: 30%;
-    max-width: 500px;
-    max-height: 500px;
-    background: conic-gradient(from 0deg at center,
-            rgba(97, 47, 171, 1) 5%,
-            rgba(97, 47, 171, 0) 14%,
-            rgba(97, 47, 171, 1) 36%,
-            rgba(97, 47, 171, 0) 63%,
-            rgba(97, 47, 171, 1) 75%);
-    position: absolute;
-    right: 10%;
-    bottom: 10%;
-    z-index: -10;
-    border-radius: 50%;
-    filter: blur(100px);
-}
-
 #label-temp {
     color: #fff;
     font-weight: bold;
@@ -226,4 +245,81 @@ body {
     100% {
         transform: translate(-50%, -50%) rotate(360deg);
     }
+}
+
+.error-semana {
+    font-size: 24px;
+    color: rgba(17, 17, 17, 0.80)
+}
+
+.cidade-container {
+    width: 600px;
+    display: flex;
+    justify-content: end;
+    gap: 24px;
+}
+
+.cidade-content {
+    display: flex;
+    flex-direction: column;
+
+    color: rgba(17, 17, 17, 0.8);
+
+    animation: cardIn 0.5s ease;
+}
+
+.cidade-content .flex-content {
+    display: flex;
+    flex-direction: row;
+}
+
+.cidade-content .flex-content .temperatura {
+    font-size: 130px;
+    font-weight: 600;
+    background-color: var(--blue-500);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* display: flex;
+    flex-direction: row;
+    align-items: center; */
+}
+
+ .flex-content .temperatura sup {
+    font-size: 40px;
+    height: 100%;
+}
+
+.cidade-content .data {
+    color: inherit;
+    font-size: 14px;
+    /* text-wrap: nowrap; */
+}
+
+.cidade-content .cidade {
+    color: inherit;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.cidade-content .vector-clima {
+    height: clamp(30px, 10rem, 200px);
+}
+
+.cidade-content .descricao-clima {
+    color: inherit;
+    font-size: clamp(1rem, 1.3rem, 3rem);
+}
+
+.cidade-content .previsoes-atual span {
+    text-wrap: nowrap;
+}
+
+.cidade-descricao {
+    animation: cardIn 0.5s ease;
+}
+
+
+.cidade-descricao ul li {
+    font-size: 26px;
 }
